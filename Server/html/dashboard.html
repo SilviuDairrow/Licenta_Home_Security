@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+
+<body>
+    <h2>Senzori Data Dashboard</h2>
+    <p id="distanta">Distanta: Loading...</p>
+    <p id="temperatura">Temperatura: Loading...</p>
+    <p id="umiditate">Umiditate: Loading...</p>
+    <script>
+        const socket = new WebSocket('ws://localhost:2323');
+
+        socket.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+            document.getElementById('distanta').innerText = `Distanta: ${data.Distanta.toFixed(2)} cm`;
+            document.getElementById('temperatura').innerText = `Temperatura: ${data.Temperatura.toFixed(2)} C`;
+            document.getElementById('umiditate').innerText = `Umiditate: ${data.Umiditate.toFixed(2)} %`;
+        };
+    </script>
+</body>
+
+</html>
