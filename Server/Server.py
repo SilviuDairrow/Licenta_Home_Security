@@ -12,10 +12,8 @@ serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 serversocket.bind(('', 5678))
 serversocket.listen(5)
 
-
-#D:\\VS RANDOM SHIT\\SD_test\\Server Licenta\\users.json
 def IncarcareJson():
-	with open('F:\\SD_test\\Server Licenta\\users.json', 'r') as file:
+	with open('F:\\Licenta_2024-2025\\Licenta_Home_Security\\Server\\test_db\\users.json', 'r') as file:
 		return json.load(file)
 
 users_info = IncarcareJson()
@@ -138,7 +136,7 @@ while True:
 		numeResursa = '/dashboard.html'
 
 	#D:\\VS RANDOM SHIT\\SD_test\\Server Licenta\\continut
-	numeFisier = 'F:\\Proiecte - Visual Studio+Code\\SD_test\\Server Licenta\\continut' + numeResursa
+	numeFisier = 'F:\\Licenta_2024-2025\\Licenta_Home_Security\\Server\\html' + numeResursa
 	
 	file = None
 	
