@@ -24,9 +24,6 @@ dateGramada = {
     'Umiditate': None
 }
 
-
-
-
 def proc_mesaj(msg):
 
     topic = msg.topic()
@@ -67,7 +64,6 @@ def start_consumer():
                 else:
                     raise KafkaException(msg.error())
                 
-
             proc_mesaj(msg)
 
     finally:

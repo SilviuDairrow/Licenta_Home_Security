@@ -1,0 +1,42 @@
+services:
+  login:
+    build:
+      context: ./Server
+      dockerfile: dockerfiles/login.dockerfile
+    ports:
+      - "8001:8001" 
+    volumes:
+      - ./Server:/app  
+    environment:
+      - PYTHONPATH=/app  
+    networks:
+      - fastapi-network  
+
+  server:
+    build:
+      context: ./Server
+      dockerfile: dockerfiles/server.dockerfile
+    ports:
+      - "8000:8000"  
+    volumes:
+      - ./Server:/app  
+    environment:
+      - PYTHONPATH=/app  
+    depends_on:
+      - login  
+    networks:
+      - fastapi-network  
+
+  consumer:
+    build:
+      context: ./Consumer  
+      dockerfile: Consumer.dockerfile
+    volumes:
+      - ./Consumer:/app  
+    networks:
+      - fastapi-network  
+    command: ["python", "consumer.py"]
+
+networks:
+  fastapi-network:
+    driver: bridge

@@ -1,0 +1,12 @@
+simplejson
+websockets
+confluent_kafka
+fastapi
+uvicorn
+requests
+sqlalchemy
+mysql-connector-python
+python-dotenv
+pydantic
+pymongo
+PyJWT

@@ -1,3 +1,2 @@
-simplejson
 websockets
 confluent_kafka

@@ -8,30 +8,69 @@
 
 <body>
     <h2>Login</h2>
+
     <form id="loginForm">
         Username: <input type="text" id="username"><br>
         Parola: <input type="password" id="password"><br>
         <button type="button" onclick="login()">Login</button>
     </form>
+
     <script>
-        function login() {
+        function login() 
+        {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            const data = { username: username, password: password };
+            const data = { id: username, password: password };
 
-            fetch('/login', {
+            fetch('/Login', 
+            {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
-            }).then(response => response.json())
-                .then(data => {
-                    if (data.status === "success") {
-                        window.location.href = '/dashboard';
-                    } else {
-                        alert("Login failed");
+            })
+            .then(response => response.json())
+            .then(data => 
+            {
+            if (data.status === "success") 
+            {
+                localStorage.setItem('access_token', data.access_token);
+                //window.href.access('http://localhost:8000/Dashboard');
+
+                fetch('http://localhost:8000/Dashboard', {
+                    method: 'GET',
+                    headers:
+                    {
+                        'Authorization': `Bearer ${data.access_token}`
                     }
-                });
+                })
+            .then(raspunsDashboard => 
+            {
+                if (raspunsDashboard.ok) {
+                    raspunsDashboard.text().then(html => 
+                    {
+                        document.body.innerHTML = html;
+                    });
+                } 
+                else 
+                {
+                    alert("Accesul la Dashboard nu a putut fi autorizt");
+                }
+            })
+            .catch(error => 
+            {
+                console.error("Eroare la accesarea Dashboardului:", error);
+            });
+        } 
+        else 
+        {
+            alert("Datele de login nu au fost introduse corect!");
         }
+        })
+        .catch(error => 
+        {
+            console.error('Eroare la login:', error);
+        });
+    }
     </script>
 </body>
 
