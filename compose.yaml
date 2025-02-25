@@ -1,10 +1,11 @@
+version: "3.8"
 services:
   login:
     build:
       context: ./Server
       dockerfile: dockerfiles/login.dockerfile
     ports:
-      - "8001:8001" 
+      - "8001:8001"
     volumes:
       - ./Server:/app  
     environment:
@@ -17,7 +18,7 @@ services:
       context: ./Server
       dockerfile: dockerfiles/server.dockerfile
     ports:
-      - "8000:8000"  
+      - "8000:8000"
     volumes:
       - ./Server:/app  
     environment:
@@ -31,11 +32,42 @@ services:
     build:
       context: ./Consumer  
       dockerfile: Consumer.dockerfile
+    ports:
+      - "2323:2323"
     volumes:
       - ./Consumer:/app  
     networks:
       - fastapi-network  
     command: ["python", "consumer.py"]
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "80:80" 
+    volumes:
+      - ./Server/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - login
+      - server
+      - react
+    networks:
+      - fastapi-network
+
+  react:
+    build:
+      context: ./Frontend
+      dockerfile: Frontend.dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./Frontend/src:/app/src
+    #volumes:
+    #  - ./Frontend:/app
+    environment:
+      - NODE_ENV=development
+    networks:
+      - fastapi-network
 
 networks:
   fastapi-network:

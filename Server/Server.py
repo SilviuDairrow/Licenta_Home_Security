@@ -16,7 +16,7 @@ cheie = "bruh"
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8000", "http://localhost:8001"], 
+    allow_origins=["*"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -27,23 +27,35 @@ def get_user_curent(token: str = Depends(oauth2)):
     try:
         data = jwt.decode(token, cheie, algorithms=[algoritm_criptare]) 
         username: str = data.get("sub")
+
         if username is None:
             raise HTTPException(status_code=401, detail="Token Invalid de la login: nu exista 'sub'")
         return username
+    
     except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Token invalid")
+    
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Tokenul de login a expriat, relogin!")
 
 @app.get("/Dashboard")
-def get_dashboard(user_curent: str = Depends(get_user_curent)):
-    
-    dashboard_path = Path("./html/Dashboard.html")
-    
-    if dashboard_path.exists():
-        
-        with open(dashboard_path, "r", encoding="utf-8") as fila:
-            content = fila.read()
-            
-        return HTMLResponse(content=content)
-    
-    raise HTTPException(status_code=404, detail="Dashboard.html nu exista")
+def get_dashboard(request: Request,):
+
+    token = request.headers.get("Authorization")
+
+    if not token:
+        raise HTTPException(status_code=401, detail="Nu exista headerul tokenului")
+
+    try:
+        _, token = token.split()
+    except ValueError:
+        raise HTTPException(status_code=401, detail="Headerul tokenului nu are formatul corect")
+
+    user = get_user_curent(token)
+
+    return {
+        "status": "success",
+        "message": "Te-ai logat cu succes",
+        "user": user,
+    }
 
