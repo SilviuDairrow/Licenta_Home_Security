@@ -1,12 +1,13 @@
-from confluent_kafka import Consumer, KafkaException, KafkaError # type: ignore
+from confluent_kafka import Consumer, KafkaException, KafkaError  # type: ignore
 import json
 import asyncio
 import websockets
+from datetime import datetime 
 
 kafka_config = {
-    'bootstrap.servers': '192.168.137.45:9092',
+    'bootstrap.servers': '192.168.69.72:9092',
     'group.id': 'distanta-consumer-group',
-    'auto.offset.reset': 'earliest'
+    'auto.offset.reset': 'latest'
 }
 
 consumer = Consumer(kafka_config)
@@ -19,23 +20,25 @@ dateGramada = {
 }
 
 def proc_mesaj(msg):
+
     topic = msg.topic()
     data = json.loads(msg.value().decode('utf-8'))
 
     if topic == 'distanta_1':
         dateGramada['Distanta'] = data['distanta']
-        print(f"\nDistanta: {data['distanta']:.2f} cm")
+
     elif topic == 'temperatura_1':
         dateGramada['Temperatura'] = data.get('temperatura')
         dateGramada['Umiditate'] = data.get('umiditate')
-        print(f"\nTemperatura: {data.get('temperatura'):.1f}C")
-        print(f"Umiditate: {data.get('umiditate'):.1f}%")
+
 
 async def start_consumer():
+
     try:
         while True:
-            msg = consumer.poll(timeout=1.0)
+            msg = consumer.poll(timeout=0.1)
             if msg is None:
+                await asyncio.sleep(0.1)  
                 continue
             if msg.error():
                 if msg.error().code() == KafkaError._PARTITION_EOF:
@@ -43,19 +46,24 @@ async def start_consumer():
                 else:
                     raise KafkaException(msg.error())
             proc_mesaj(msg)
+            await asyncio.sleep(0.1)
     finally:
         consumer.close()
 
-async def trimite_date(websocket, path):
+async def trimite_date(websocket, path=""):
+
     while True:
         await websocket.send(json.dumps(dateGramada))
-        await asyncio.sleep(1)
+        await asyncio.sleep(.3)
 
 async def main():
-    start_server = websockets.serve(trimite_date, "0.0.0.0", 2323)
-    await start_server
 
-    await start_consumer()
+    start_server = websockets.serve(trimite_date, "0.0.0.0", 2323)
+    consumer_task = asyncio.create_task(start_consumer())
+
+    await start_server
+    await consumer_task
+
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()

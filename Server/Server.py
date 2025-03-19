@@ -1,14 +1,21 @@
-from fastapi import Depends, FastAPI, HTTPException, Request, Response
+from fastapi import Depends, FastAPI, HTTPException, Request, Response, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.middleware.cors import CORSMiddleware
 
 import datetime
-from pydantic import BaseModel
+import asyncio
 import jwt
+import base64
+import json
+
+from pydantic import BaseModel
+
 from pathlib import Path
 
+
 app = FastAPI()
+ultimul_frame = {"camera1": None, "camera2": None}
 
 oauth2 = OAuth2PasswordBearer(tokenUrl="token")
 algoritm_criptare = "HS512"
@@ -59,3 +66,45 @@ def get_dashboard(request: Request,):
         "user": user,
     }
 
+@app.websocket("/ws/{camera_id}")
+async def websocket_camere(websocket: WebSocket, camera_id: str):
+
+    await websocket.accept()
+    
+    tip_client = await websocket.receive_text()
+
+    try:
+        if tip_client == "camera1":
+            while True:
+
+                data = await websocket.receive_text()
+
+                date_frame = json.loads(data)
+
+                if camera_id in date_frame:
+                    ultimul_frame[camera_id] = base64.b64decode(date_frame[camera_id])
+
+                await asyncio.sleep(0.1)
+
+        elif tip_client == "camera2":
+            while True:
+
+                data = await websocket.receive_text()
+
+                date_frame = json.loads(data)
+
+                if camera_id in date_frame:
+                    ultimul_frame[camera_id] = base64.b64decode(date_frame[camera_id])
+
+                await asyncio.sleep(0.1)
+
+        elif tip_client == "frontend":
+            while True:
+
+                if ultimul_frame[camera_id]:
+                    await websocket.send_text(json.dumps({camera_id: base64.b64encode(ultimul_frame[camera_id]).decode('utf-8')}))
+
+                await asyncio.sleep(0.1)
+
+    except WebSocketDisconnect:
+        print(f"Clientul {tip_client} de la camera {camera_id} a fost deconectat")

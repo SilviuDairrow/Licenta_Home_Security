@@ -51,6 +51,7 @@ services:
       - login
       - server
       - react
+      - consumer
     networks:
       - fastapi-network
 
@@ -62,13 +63,24 @@ services:
       - "5173:5173"
     volumes:
       - ./Frontend/src:/app/src
-    #volumes:
-    #  - ./Frontend:/app
     environment:
       - NODE_ENV=development
+    networks:
+      - fastapi-network
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db  
     networks:
       - fastapi-network
 
 networks:
   fastapi-network:
     driver: bridge
+
+volumes: 
+  mongo-data:

@@ -37,7 +37,7 @@ const Dashboard = () => {
         setAuthChecked(true);
         setLoading(false);
 
-        const ws = new WebSocket('ws://localhost:2323');
+        const ws = new WebSocket('ws://localhost/ws/');
 
         ws.onmessage = (event: MessageEvent) => {
           try {

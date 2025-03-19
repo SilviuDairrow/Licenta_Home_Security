@@ -15,7 +15,7 @@ function App() {
     <div className="app-container">
       <header>
         <h1 className='titlu-pagina'>Home Security System</h1>
-        {location.pathname !== '/' && (
+        {location.pathname !== '/' && location.pathname !== '/creeaza-cont' && (
           <div className="navbar">
             <div className="butoane-navbar">
               <button className="buton-navbar" onClick={() => navigate('/dashboard')}>
