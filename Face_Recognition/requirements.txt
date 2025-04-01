@@ -1,0 +1,7 @@
+onnxruntime
+insightface
+numpy
+opencv-python
+websockets
+fastapi
+uvicorn

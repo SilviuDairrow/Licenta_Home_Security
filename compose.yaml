@@ -78,9 +78,26 @@ services:
     networks:
       - fastapi-network
 
+  face_recognition:
+    build:
+      context: ./Face_Recognition
+      dockerfile: face_recognition_service.dockerfile
+    volumes:
+      - ./Face_Recognition:/app
+      - ./Fete_Jupani_Detectate:/app/Fete_Jupani_Detectate
+      - ./Fete_Straine_Detectate:/app/Fete_Straine_Detectate
+    networks:
+      - fastapi-network
+    depends_on:
+      - server
+    environment:
+      - PYTHONUNBUFFERED=1
+
 networks:
   fastapi-network:
     driver: bridge
 
 volumes: 
   mongo-data:
+  
+  

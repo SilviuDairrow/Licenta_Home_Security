@@ -106,5 +106,21 @@ async def websocket_camere(websocket: WebSocket, camera_id: str):
 
                 await asyncio.sleep(0.1)
 
+        elif tip_client == "face_recog_camera1":
+            while True:
+
+                if ultimul_frame[camera_id]:
+                    await websocket.send_text(json.dumps({camera_id: base64.b64encode(ultimul_frame[camera_id]).decode('utf-8')}))
+                
+                await asyncio.sleep(0.1)
+        
+        elif tip_client == "face_recog_camera2":
+            while True:
+
+                if ultimul_frame[camera_id]:
+                    await websocket.send_text(json.dumps({camera_id: base64.b64encode(ultimul_frame[camera_id]).decode('utf-8')}))
+                
+                await asyncio.sleep(0.1)
+                
     except WebSocketDisconnect:
         print(f"Clientul {tip_client} de la camera {camera_id} a fost deconectat")
