@@ -129,3 +129,22 @@
       padding: 1.5rem;
     }
   }
+
+  .buton-login-creeaza {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #1a86a7;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 0.5rem;
+  }
+
+  .buton-login-creeaza:hover {
+    background-color: #1c9187;
+    transform: scale(1.05);
+  }

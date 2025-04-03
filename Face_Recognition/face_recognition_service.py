@@ -13,7 +13,6 @@ import insightface
 #link pt modelele pe care le am folosit ca sa nu uit sa citez:
 #https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_s.zip   
 
-#git commit -m "Am adaugat face recognition cu insightface (delay total ~4-5sec), se stocheaza fetele necunoscute"
 
 Folder_Fete_Jupani = "Fete_Jupani_Detectate"
 Folder_Fete_Straini = "Fete_Straine_Detectate"

@@ -42,33 +42,43 @@ const CreeazaCont = () => {
   };
 
   return (
-    <div className="creeaza-cont-container">
+    <div className = "creeaza-cont-container">
       <h2>Creeaza Cont Nou</h2>
-      <form onSubmit={handleCreateAccount}>
-        <div className="form-creeaza-cont">
-          <label htmlFor="username">Username:</label>
+      <form onSubmit = {handleCreateAccount}>
+
+        <div className = "form-creeaza-cont">
+          <label htmlFor = "username">Username:</label>
           <input
-            id="username"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            id = "username"
+            type = "text"
+            value = {username}
+            onChange = {(e) => setUsername(e.target.value)}
             required
           />
         </div>
-        <div className="form-creeaza-cont">
-          <label htmlFor="password">Password:</label>
+        
+        <div className = "form-creeaza-cont">
+          <label htmlFor = "password">Password:</label>
           <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            id = "password"
+            type = "password"
+            value = {password}
+            onChange = {(e) => setPassword(e.target.value)}
             required
           />
         </div>
-        {error && <p className="mesaj-eroare">{error}</p>}
-        {success && <p className="mesaj-succes">{success}</p>}
-        <button type="submit" className="buton-creeaza-cont">
+
+        {error && <p className = "mesaj-eroare">{error}</p>}
+        {success && <p className = "mesaj-succes">{success}</p>}
+
+        <button type = "submit" className = "buton-creeaza-cont">
           Creeaza Cont
+        </button>
+
+        <button type = "button" 
+        className = "buton-login-creeaza" 
+        onClick={() => navigate('/')}>
+          Inapoi la Login
         </button>
       </form>
     </div>
