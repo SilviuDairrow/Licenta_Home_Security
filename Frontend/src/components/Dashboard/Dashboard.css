@@ -17,7 +17,7 @@ main{
   font-size: 2rem;
   font-weight: 600;
   color: #1d2129;
-  margin-bottom: 2rem;
+  margin-bottom: 16px;
   text-align: center;
 }
 
@@ -25,13 +25,9 @@ main{
 .mesaj-eroare {
   font-size: 1.25rem;
   font-weight: 500;
-  color: #6b7280;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-.mesaj-eroare {
   color: #ef4444;
+  text-align: center;
+  margin-top: 16px;
 }
 
 .date-senzori {
@@ -77,4 +73,36 @@ main{
   .dashboard-container h2 {
     font-size: 1.5rem;
   }
+}
+
+.image-gallery {
+  margin-top: 1rem;
+}
+
+.image-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.image-card {
+  width: 200px;
+  height: 200px;
+  border: 1px solid #ccc;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-card img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.empty-placeholder {
+  margin-top: 16px;
+  margin-bottom: 16px;
 }

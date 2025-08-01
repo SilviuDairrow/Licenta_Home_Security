@@ -78,6 +78,16 @@ services:
     networks:
       - fastapi-network
 
+  mongo-server:
+    image: mongo:latest
+    container_name: mongo-server
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo-server-data:/data/db  
+    networks:
+      - fastapi-network
+
   face_recognition:
     build:
       context: ./Face_Recognition
@@ -93,11 +103,38 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
 
+  master:
+    image: chrislusf/seaweedfs 
+    hostname: master
+    ports:
+      - 9333:9333
+      - 19333:19333
+      - 9324:9324
+    command: "master -ip=master -ip.bind=0.0.0.0 -metricsPort=9324"
+    networks:
+      - fastapi-network
+
+  volume:
+    image: chrislusf/seaweedfs 
+    hostname: volume
+    ports:
+      - 8083:8083
+      - 18080:18080
+      - 9325:9325
+    command: 'volume -mserver="master:9333" -ip.bind=0.0.0.0 -port=8083 -metricsPort=9325'
+    depends_on:
+      - master
+    networks:
+      - fastapi-network
+    volumes:
+      - ./seaweedfs/volume:/data   
+
 networks:
   fastapi-network:
     driver: bridge
 
 volumes: 
   mongo-data:
+  mongo-server-data:
   
   

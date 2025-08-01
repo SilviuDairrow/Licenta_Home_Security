@@ -3,9 +3,15 @@ import json
 import asyncio
 import websockets
 from datetime import datetime 
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+IP_raspberry_pi = os.getenv("RASPBERRY_PI_IP")
 
 kafka_config = {
-    'bootstrap.servers': '192.168.69.72:9092',
+    'bootstrap.servers': f'{IP_raspberry_pi}:9092',
     'group.id': 'distanta-consumer-group',
     'auto.offset.reset': 'latest'
 }

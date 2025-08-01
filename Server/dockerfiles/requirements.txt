@@ -13,3 +13,4 @@ PyJWT
 bcrypt
 typing
 asyncio
+python-multipart
